@@ -8,11 +8,42 @@
 import SwiftUI
 
 struct EntryListView: View {
+    @StateObject private var viewModel = JournalViewModel()
+    @State private var showAddEntry = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            List {
+                ForEach(viewModel.entries) { entry in
+                    NavigationLink(destination: EntryDetailView(entry: entry, viewModel: viewModel)) {
+                        EntryRowView(entry: entry)
+                    }
+                }
+                .onDelete(perform: deleteEntry)
+            }
+            .navigationTitle("Journal Entries")
+            .toolbar {
+                Button(action: { showAddEntry = true }) {
+                    Image(systemName: "plus")
+                }
+            }
+            .onAppear {
+                viewModel.fetchEntries()
+            }
+            .sheet(isPresented: $showAddEntry) {
+                EntryEditView(viewModel: viewModel)
+            }
+        }
+    }
+    
+    // Delete entry
+    private func deleteEntry(at offsets: IndexSet) {
+        offsets.forEach { index in
+            let entry = viewModel.entries[index]
+            viewModel.deleteEntry(entry: entry)
+        }
     }
 }
-
 #Preview {
     EntryListView()
 }
