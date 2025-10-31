@@ -66,5 +66,5 @@ struct EntryEditView: View {
 }
 
 #Preview {
-    EntryEditView()
+    EntryEditView(viewModel: <#JournalViewModel#>)
 }

@@ -37,5 +37,5 @@ struct EntryRowView: View {
     }
 }
 #Preview {
-    EntryRowView()
+    EntryRowView(entry: <#JournalEntry#>)
 }
